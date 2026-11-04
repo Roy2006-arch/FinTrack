@@ -1,0 +1,27 @@
+# Requires an initialized, TLS-enabled external MySQL database.
+services:
+  - type: web
+    name: fintrack-api-kaustav
+    runtime: docker
+    plan: free
+    region: singapore
+    repo: https://github.com/Roy2006-arch/FinTrack
+    branch: main
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    autoDeployTrigger: commit
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://fintrack-kaustav-roy.netlify.app
+      - key: DEMO_ENABLED
+        value: "false"
+      - key: JAVA_TOOL_OPTIONS
+        value: "-XX:MaxRAMPercentage=65.0"
