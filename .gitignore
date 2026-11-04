@@ -1,0 +1,12 @@
+backend/target/
+backend/application.properties
+backend/src/main/resources/application-local.properties
+.env
+.idea/
+.vscode/
+*.log
+*.class
+__pycache__/
+node_modules/
+test-results/
+.DS_Store

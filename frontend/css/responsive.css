@@ -1,0 +1,156 @@
+@import url('design.css');
+
+@media(min-width:1500px) { .page-content { padding-top:40px; }.chart-wrap { height:310px; } }
+@media(max-width:1200px) { .sidebar { width:214px; padding:28px 15px 20px; }.app-main { margin-left:214px; }.page-content { padding:28px 24px; }.topbar { padding:0 24px; }.metrics-grid { gap:12px; }.metric { padding:18px; }.metric strong { font-size:22px; }.cards-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.finance-table td,.finance-table th { padding-left:16px; padding-right:16px; }.filter-grid { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:991px) { .sidebar { transform:translateX(-100%); transition:transform .2s; width:244px; }.app-main { margin-left:0; }.nav-open .sidebar { transform:translateX(0); }.nav-open .nav-backdrop { display:block; position:fixed; inset:0; z-index:25; background:#05142188; border:0; }.menu-toggle { display:inline-grid; }.topbar { height:72px; }.workspace-label { margin-right:auto; }.topbar-actions { gap:16px; }.dashboard-charts { grid-template-columns:1.25fr 1fr; }.auth-story { padding:40px 9%; }.auth-story h1 { font-size:39px; }.auth-form-wrap { padding:40px 28px; } }
+@media(max-width:767px) { .page-content { padding:25px 20px; }.topbar { padding:0 20px; }.today-label { display:none; }.page-heading { align-items:flex-start; }.page-heading h1 { font-size:24px; }.metrics-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.dashboard-charts,.dashboard-lower,.report-grid,.profile-grid { grid-template-columns:1fr; gap:0; }.filter-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.cards-grid { gap:14px; }.finance-card { padding:20px; }.report-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }.auth-page { grid-template-columns:1fr; }.auth-story { padding:24px 28px; }.auth-story h1 { font-size:27px; letter-spacing:-1px; margin:28px 0 8px; }.auth-story>div>p,.auth-features,.auth-story footer { display:none; }.auth-form-wrap { padding:35px 24px; }.auth-form-box { max-width:440px; }.auth-story .brand { font-size:22px; }.auth-story:after { width:220px; height:220px; }.auth-form-box h2 { font-size:25px; } }
+@media(max-width:480px) { .page-content { padding:22px 14px; }.topbar { padding:0 14px; height:64px; gap:8px; }.topbar-actions { gap:8px; }.workspace-label { font-size:10px; }.page-heading { flex-wrap:wrap; gap:16px; margin-bottom:23px; }.page-heading .page-actions { width:100%; }.page-heading .page-actions>.btn { flex:1; }.page-heading h1 { font-size:25px; }.page-heading p { font-size:12px; }.metrics-grid { gap:10px; }.metric { padding:16px 14px; }.metric-top { font-size:10px; }.metric-top i { font-size:15px; }.metric strong { font-size:21px; margin-top:13px; }.metric small { font-size:9px; }.panel-heading { padding:19px 18px 15px; }.panel-body { padding:18px; }.chart-wrap { padding:5px 14px 18px; height:250px; }.cards-grid { grid-template-columns:1fr; }.filter-grid { gap:12px; }.filter-grid .search-field { grid-column:1/-1; }.filter-footer { align-items:flex-end; }.filter-footer .btn { padding:10px 12px; }.form-label { font-size:11px; }.form-control,.form-select { font-size:12px; padding:10px; }.pagination-bar { padding:15px; font-size:10px; }.pagination-buttons .btn { padding:8px 10px; }.dashboard-foot { padding:15px 12px; gap:9px; }.dashboard-foot>div+div { padding-left:10px; }.dashboard-foot span { font-size:9px; }.dashboard-foot strong { font-size:12px; }.form-row { gap:12px; }.dialog-heading,.dialog-body { padding:20px; }.dialog-footer { padding:16px 20px; }.report-stats .metric strong { font-size:19px; }.btn { font-size:11px; } }
+@media(max-width:480px) { .metric strong { font-size:clamp(16px,5vw,21px); } }
+
+/* Horizon design: responsive composition and touch-sized interactions. */
+@media (max-width: 1200px) {
+  .quick-search span,.quick-search kbd { display: none; }
+  .quick-search { padding: 10px; }
+  .landing-hero { gap: 35px; padding-top: 55px; }
+  .landing-hero h1 { font-size: 55px; }
+  .float-goal { right: -5px; }
+  .hero-orbit { margin-right: 0; width: 180px; }
+}
+@media (max-width: 991px) {
+  .sidebar { padding: 29px 22px 22px; overflow-y: auto; }
+  .sidebar-note { margin-top: 35px; }
+  .nav-open { overflow: hidden; }
+  .nav-open .nav-backdrop { backdrop-filter: blur(5px); }
+  .landing-shell { padding-left: 28px; padding-right: 28px; }
+  .landing-nav nav { gap: 18px; }
+  .landing-hero { gap: 22px; padding-top: 60px; padding-bottom: 65px; min-height: 560px; }
+  .landing-hero h1 { font-size: 46px; letter-spacing: -2.5px; }
+  .landing-hero-copy>p { font-size: 12px; }
+  .preview-window { padding: 17px; }
+  .preview-balance { padding: 17px; }
+  .preview-balance>strong { font-size: 27px; }
+  .float-card { padding: 11px 13px; gap: 8px; }
+  .float-card strong { font-size: 10px; }
+  .float-card>i { width: 30px; height: 30px; }
+  .float-spending { left: -6px; }
+  .scene-star { right: -8px; }
+  .feature-tile { padding: 23px; }
+  .auth-story { padding: 36px 9%; }
+  .auth-story h1 { font-size: 44px; }
+  .auth-art-card { width: 220px; }
+  .auth-art-badge { right: -12px; }
+}
+@media (max-width: 767px) {
+  .page-heading h1 { font-size: 27px; }
+  .metric strong { font-size: 27px; }
+  .overview-hero { padding: 25px; gap: 10px; }
+  .overview-hero h2 { font-size: 28px; }
+  .hero-orbit { width: 155px; height: 165px; }
+  .orbit-ring { width: 155px; height: 155px; }
+  .savings-orb { width: 120px; height: 120px; }
+  .savings-orb strong { font-size: 26px; }
+  .orbit-label { right: -8px; bottom: 0; font-size: 8px; }
+  .landing-nav nav { display: none; }
+  .landing-hero { grid-template-columns: 1fr; gap: 35px; padding-top: 38px; padding-bottom: 55px; }
+  .landing-hero-copy { text-align: center; }
+  .landing-hero h1 { font-size: 58px; letter-spacing: -3.2px; }
+  .landing-hero-copy>p { margin-left: auto; margin-right: auto; font-size: 14px; }
+  .landing-cta,.landing-caption { justify-content: center; }
+  .product-scene { width: min(100%, 430px); margin: 0 auto; padding: 32px 25px 38px; }
+  .preview-window { padding: 23px; }
+  .preview-balance>strong { font-size: 34px; }
+  .landing-strip { grid-template-columns: repeat(2, 1fr); gap: 25px; }
+  .landing-strip>span { font-size: 10px; }
+  .landing-features { padding-top: 60px; padding-bottom: 48px; }
+  .landing-section-heading h2 { font-size: 31px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-tile { padding: 29px; }
+  .feature-visual { max-width: 270px; margin: 20px auto 0; }
+  .landing-final { flex-direction: column; align-items: flex-start; padding: 33px; }
+  .landing-final h2 { font-size: 26px; }
+  .auth-page { gap: 12px; padding: 12px; }
+  .auth-story { min-height: auto; padding: 24px 28px; border-radius: 21px; }
+  .auth-story h1 { font-size: 32px; letter-spacing: -1.4px; margin: 27px 0 0; }
+  .auth-art { display: none; }
+  .auth-story h1 br { display: initial; }
+  .auth-story h1 em { display: block; }
+  .auth-form-wrap { padding: 43px 26px 30px; border-radius: 21px; }
+  .auth-form-box h2 { font-size: 29px; }
+  .auth-theme-toggle { top: 10px; right: 12px; }
+}
+@media (max-width: 480px) {
+  .sidebar-note { margin-top: auto; }
+  .page-heading h1 { font-size: 26px; }
+  .metric { border-radius: 16px; padding: 16px; }
+  .metric-top { font-size: 10px; gap: 5px; }
+  .metric-top i { width: 27px; height: 27px; font-size: 12px; border-radius: 8px; }
+  .metric strong { font-size: clamp(16px, 5.5vw, 25px); }
+  .overview-hero { grid-template-columns: 1fr; padding: 23px; }
+  .overview-hero h2 { font-size: 28px; }
+  .hero-orbit { display: none; }
+  .hero-tag { font-size: 8px; }
+  .hero-actions .btn { padding: 10px 13px; }
+  .workspace-label { font-size: 10px; }
+  .workspace-dot { display: none; }
+  .topbar-actions { gap: 5px; }
+  .quick-search { background: transparent; border: 0; font-size: 15px; padding: 8px; }
+  .topbar .user-avatar { width: 34px; height: 34px; font-size: 10px; }
+  .chart-heading-actions { gap: 5px; }
+  .chart-heading-actions .subtle-link { display: none; }
+  .panel-heading h2 { font-size: 14px; }
+  .panel-heading p { font-size: 10px; }
+  .finance-card { border-radius: 21px; padding: 24px; }
+  .finance-card h2 { font-size: 20px; }
+  .form-control,.form-select { font-size: 16px; min-height: 44px; }
+  .form-label { font-size: 11px; }
+  .row-actions .icon-button { width: 40px; height: 40px; }
+  .landing-shell { padding-left: 22px; padding-right: 22px; }
+  .landing-nav { padding-top: 21px; gap: 8px; }
+  .landing-nav .brand { font-size: 23px; }
+  .landing-nav .brand-icon { width: 33px; height: 33px; font-size: 19px; }
+  .landing-nav .btn { font-size: 10px; padding: 10px 13px; }
+  .landing-nav-actions { gap: 5px; }
+  .landing-nav-actions>.icon-button { width: 30px; }
+  .landing-hero h1 { font-size: clamp(39px, 11.6vw, 54px); letter-spacing: -2.7px; }
+  .landing-hero h1 em::after { height: 12px; bottom: 3px; }
+  .landing-hero-copy>p { font-size: 12px; }
+  .landing-eyebrow { font-size: 8px; padding: 8px 10px; }
+  .landing-cta { gap: 12px; }
+  .landing-cta .btn { padding: 14px 16px; }
+  .landing-cta .text-link { font-size: 11px; }
+  .product-scene { padding-left: 12px; padding-right: 12px; }
+  .scene-halo { inset: 0; }
+  .preview-window { padding: 18px; }
+  .float-card { padding: 10px 12px; }
+  .float-goal { right: 0; }
+  .float-spending { left: 0; }
+  .scene-star { right: -3px; font-size: 28px; }
+  .landing-section-heading h2 { font-size: 29px; }
+  .landing-footer { flex-direction: column; align-items: center; text-align: center; gap: 9px; }
+  .landing-final { padding: 28px; }
+  .auth-story h1 { font-size: 29px; }
+  .auth-form-wrap { padding-left: 22px; padding-right: 22px; }
+  .command-input-wrap { padding: 16px; gap: 8px; }
+  .command-input { font-size: 16px; }
+}
+@media (max-height: 760px) and (min-width: 768px) {
+  .auth-art { height: 110px; margin: 20px 0; }
+  .auth-story h1 { font-size: 43px; margin-top: 25px; }
+  .auth-features { margin: 20px 0; }
+}
+
+/* Horizon landing/auth overrides come last so the legacy component breakpoints
+   above cannot change the reference composition. */
+@media (max-width: 991px) {
+  .horizon-hero { grid-template-columns: 1fr; }
+  .horizon-stage { min-height: 590px; }
+}
+@media (max-width: 767px) {
+  .auth-story h1 { font-size: 57px; line-height: .87; letter-spacing: -2px; margin-top: 40px; }
+  .auth-form-box h2 { font-size: 48px; }
+  .horizon-stage { min-height: 515px; }
+}
+@media (max-width: 480px) {
+  .auth-story h1 { font-size: 47px; line-height: .87; margin-top: 28px; }
+  .auth-form-box h2 { font-size: 43px; }
+}

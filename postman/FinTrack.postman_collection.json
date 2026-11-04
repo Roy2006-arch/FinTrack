@@ -1,0 +1,57 @@
+{
+  "info": {"name": "FinTrack — Complete REST API", "description": "Run in order against a development database. Set the password collection variable to a valid test password (10–72 ASCII characters, uppercase, lowercase, digit). A fresh fake email is generated per run. Tokens and IDs are captured automatically. Cleanup removes created financial resources; the test account remains. See docs/api-documentation.md.", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{token}}", "type": "string"}]},
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8080/api"},
+    {"key": "password", "value": ""},
+    {"key": "email", "value": ""},
+    {"key": "token", "value": ""},
+    {"key": "categoryId", "value": ""},
+    {"key": "transactionId", "value": ""},
+    {"key": "budgetId", "value": ""},
+    {"key": "goalId", "value": ""}
+  ],
+  "event": [
+    {"listen": "prerequest", "script": {"type": "text/javascript", "exec": ["const now = new Date();", "const year = now.getFullYear(), month = now.getMonth() + 1;", "pm.collectionVariables.set('year', year);", "pm.collectionVariables.set('month', month);", "pm.collectionVariables.set('date', `${year}-${String(month).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`);", "pm.collectionVariables.set('start', `${year}-${String(month).padStart(2,'0')}-01`);", "pm.collectionVariables.set('end', `${year}-${String(month).padStart(2,'0')}-${new Date(year,month,0).getDate()}`);"]}},
+    {"listen": "test", "script": {"type": "text/javascript", "exec": ["pm.test('Request succeeds', () => pm.expect(pm.response.code).to.be.within(200, 299));", "if ((pm.response.headers.get('Content-Type') || '').includes('application/json')) { pm.test('Response is valid JSON', () => pm.response.json()); }"]}}
+  ],
+  "item": [
+    {"name": "01 Register", "event": [
+      {"listen": "prerequest", "script": {"exec": ["if (!pm.collectionVariables.get('password')) throw new Error('Set collection variable password before running');", "pm.collectionVariables.set('email', `postman-${Date.now()}@example.com`);"]}},
+      {"listen": "test", "script": {"exec": ["pm.response.to.have.status(201);", "pm.collectionVariables.set('token', pm.response.json().token);", "pm.test('Password never returned', () => pm.expect(pm.response.json().user).not.to.have.property('password'));"]}}
+    ], "request": {"method": "POST", "auth": {"type": "noauth"}, "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/auth/register", "body": {"mode": "raw", "raw": "{\"name\":\"Postman Demo\",\"email\":\"{{email}}\",\"password\":\"{{password}}\"}"}}},
+    {"name": "02 Logout initial registration session", "request": {"method": "POST", "url": "{{baseUrl}}/auth/logout"}},
+    {"name": "03 Login", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('token', pm.response.json().token);"]}}], "request": {"method": "POST", "auth": {"type": "noauth"}, "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/auth/login", "body": {"mode": "raw", "raw": "{\"email\":\"{{email}}\",\"password\":\"{{password}}\"}"}}},
+    {"name": "04 Get profile", "request": {"method": "GET", "url": "{{baseUrl}}/users/me"}},
+    {"name": "05 Update profile", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/users/me", "body": {"mode": "raw", "raw": "{\"name\":\"Postman Updated\",\"email\":\"{{email}}\",\"phone\":\"+91 90000 00000\"}"}}},
+    {"name": "06 List categories", "request": {"method": "GET", "url": "{{baseUrl}}/categories"}},
+    {"name": "07 Create category", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('categoryId', pm.response.json().id);"]}}], "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/categories", "body": {"mode": "raw", "raw": "{\"name\":\"Postman Education\",\"type\":\"EXPENSE\"}"}}},
+    {"name": "08 Update category", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/categories/{{categoryId}}", "body": {"mode": "raw", "raw": "{\"name\":\"Postman Learning\",\"type\":\"EXPENSE\"}"}}},
+    {"name": "09 Create transaction", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('transactionId', pm.response.json().id);"]}}], "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/transactions", "body": {"mode": "raw", "raw": "{\"amount\":500.25,\"type\":\"EXPENSE\",\"categoryId\":{{categoryId}},\"description\":\"Postman textbook\",\"paymentMethod\":\"UPI\",\"transactionDate\":\"{{date}}\"}"}}},
+    {"name": "10 Get transaction", "request": {"method": "GET", "url": "{{baseUrl}}/transactions/{{transactionId}}"}},
+    {"name": "11 Update transaction", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/transactions/{{transactionId}}", "body": {"mode": "raw", "raw": "{\"amount\":750,\"type\":\"EXPENSE\",\"categoryId\":{{categoryId}},\"description\":\"Postman updated textbook\",\"paymentMethod\":\"CARD\",\"transactionDate\":\"{{date}}\"}"}}},
+    {"name": "12 Search filter sort and paginate", "event": [{"listen": "test", "script": {"exec": ["pm.test('Filtered transaction found', () => pm.expect(pm.response.json().totalElements).to.eql(1));"]}}], "request": {"method": "GET", "url": "{{baseUrl}}/transactions?search=updated&type=EXPENSE&categoryId={{categoryId}}&paymentMethod=CARD&start={{start}}&end={{end}}&sort=amount&direction=desc&page=0&size=10"}},
+    {"name": "13 Export transactions", "request": {"method": "GET", "url": "{{baseUrl}}/transactions/export?start={{start}}&end={{end}}"}},
+    {"name": "14 Create budget", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('budgetId', pm.response.json().id);", "pm.test('Actual spending calculated', () => pm.expect(pm.response.json().spent).to.eql(750));"]}}], "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/budgets", "body": {"mode": "raw", "raw": "{\"categoryId\":{{categoryId}},\"amount\":1000,\"month\":{{month}},\"year\":{{year}}}"}}},
+    {"name": "15 List budgets", "request": {"method": "GET", "url": "{{baseUrl}}/budgets?month={{month}}&year={{year}}"}},
+    {"name": "16 Get budget", "request": {"method": "GET", "url": "{{baseUrl}}/budgets/{{budgetId}}"}},
+    {"name": "17 Update budget", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/budgets/{{budgetId}}", "body": {"mode": "raw", "raw": "{\"categoryId\":{{categoryId}},\"amount\":1500,\"month\":{{month}},\"year\":{{year}}}"}}},
+    {"name": "18 Create goal", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('goalId', pm.response.json().id);"]}}], "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/goals", "body": {"mode": "raw", "raw": "{\"goalName\":\"Postman laptop\",\"targetAmount\":80000,\"savedAmount\":45000,\"deadline\":\"{{end}}\"}"}}},
+    {"name": "19 List goals", "request": {"method": "GET", "url": "{{baseUrl}}/goals"}},
+    {"name": "20 Get goal", "request": {"method": "GET", "url": "{{baseUrl}}/goals/{{goalId}}"}},
+    {"name": "21 Update goal", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "{{baseUrl}}/goals/{{goalId}}", "body": {"mode": "raw", "raw": "{\"goalName\":\"Postman laptop\",\"targetAmount\":80000,\"savedAmount\":50000,\"deadline\":\"{{end}}\"}"}}},
+    {"name": "22 Dashboard summary", "request": {"method": "GET", "url": "{{baseUrl}}/dashboard/summary"}},
+    {"name": "23 Monthly totals", "request": {"method": "GET", "url": "{{baseUrl}}/dashboard/monthly?year={{year}}"}},
+    {"name": "24 Dashboard category expenses", "request": {"method": "GET", "url": "{{baseUrl}}/dashboard/category-expenses?start={{start}}&end={{end}}"}},
+    {"name": "25 Recent transactions", "request": {"method": "GET", "url": "{{baseUrl}}/dashboard/recent-transactions"}},
+    {"name": "26 Monthly report", "request": {"method": "GET", "url": "{{baseUrl}}/reports/monthly?month={{month}}&year={{year}}"}},
+    {"name": "27 Category report", "request": {"method": "GET", "url": "{{baseUrl}}/reports/category?start={{start}}&end={{end}}"}},
+    {"name": "28 Date range report", "request": {"method": "GET", "url": "{{baseUrl}}/reports/date-range?start={{start}}&end={{end}}"}},
+    {"name": "29 Export report", "request": {"method": "GET", "url": "{{baseUrl}}/reports/export?start={{start}}&end={{end}}"}},
+    {"name": "30 Delete transaction", "request": {"method": "DELETE", "url": "{{baseUrl}}/transactions/{{transactionId}}"}},
+    {"name": "31 Delete budget", "request": {"method": "DELETE", "url": "{{baseUrl}}/budgets/{{budgetId}}"}},
+    {"name": "32 Delete goal", "request": {"method": "DELETE", "url": "{{baseUrl}}/goals/{{goalId}}"}},
+    {"name": "33 Delete category", "request": {"method": "DELETE", "url": "{{baseUrl}}/categories/{{categoryId}}"}},
+    {"name": "34 Logout", "request": {"method": "POST", "url": "{{baseUrl}}/auth/logout"}}
+  ]
+}
